@@ -2,79 +2,49 @@
 #include <PubSubClient.h>
 
 // Network SSID
-const char* ssid = "Upstairs";
+const char* ssid = "Upstairs"; // Local WiFi connection
 const char* password = "";
-const char* mqtt_server = "192.168.10.132";
+const char* mqtt_server = "192.168.10.132"; // IP address of the subscriper
 int IRsensor1 = 14; // LED conncected to D2 of Wemos
 int IRsensor2 = 16; // IR sensor connected to D0 of Wemos
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+// Establish the WiFi connection
 void setup_wifi() {
   Serial.begin(115200);
   delay(10);
- 
-//  // Connect WiFi
-//  Serial.println();
-//  Serial.print("Connecting to ");
-//  Serial.println(ssid);
   
-    WiFi.begin(ssid, password);
-// 
-//  while (WiFi.status() != WL_CONNECTED) {
-//    delay(500);
-//    Serial.print(".");
-//  }
-//  Serial.println("");
-//  Serial.println("WiFi connected");
-// 
-//  // Print the IP address
-//  Serial.print("IP address: ");
-//  Serial.print(WiFi.localIP());
+  WiFi.begin(ssid, password);
 }
 
+// Callback function to ensure connection
 void callback(String topic, byte* message, unsigned int length) {
-//  Serial.print("Message arrived on topic: ");
-//  Serial.print(topic);
-//  Serial.print(". Message: ");
     String messageTemp;
-//  
+    
   for (int i = 0; i < length; i++) {
     Serial.print((char)message[i]);
     messageTemp += (char)message[i];
   }
-//  Serial.println();
-
-  // If a message is received on the topic room/lamp, you check if the message is either on or off. Turns the lamp GPIO according to the message
-//  if(topic=="home/lamp"){
-//      Serial.print("Changing Room lamp to ");
-//      if(messageTemp == "on"){
-//        digitalWrite(lamp, HIGH);
-//        Serial.print("On");
-//      }
-//      else if(messageTemp == "off"){
-//        digitalWrite(lamp, LOW);
-//        Serial.print("Off");
-//      }
-//  }
   Serial.println();
 }
 
+// Setup connections of the WiFi module
 void setup() {
   // Setup the IOpins
-  pinMode(IRsensor1, INPUT);
+  pinMode(IRsensor1, INPUT); // Set the IO pins
   pinMode(IRsensor2, INPUT);
 
   Serial.begin(115200);
   setup_wifi();
-  client.setServer(mqtt_server, 1883);
+  client.setServer(mqtt_server, 1883); // Setup the client (Raspberry Pi 4)
   client.setCallback(callback);
 }
 
 
 void reconnect() {
-  // Loop until we're reconnected
+  // Loop until reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
@@ -91,9 +61,6 @@ void reconnect() {
     */
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");  
-      // Subscribe or resubscribe to a topic
-      // You can subscribe to more topics (to control more LEDs in this example)
-      // client.subscribe("home/lamp");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -113,17 +80,11 @@ void loop() {
   if(!client.loop())
     client.connect("ESP8266Client");
 
-  int statusSensor1 = digitalRead(IRsensor1);
+  int statusSensor1 = digitalRead(IRsensor1); // Set variables to the outputs of the sensors
   int statusSensor2 = digitalRead(IRsensor2);
   
   if ((statusSensor1 == 0) && (statusSensor2 == 0)){
     Serial.println("1");
-    client.publish("room/IR", "1");
+    client.publish("room/IR", "1"); // Publish outputs of the two sensors to the client
   }
-  
-    //else
-   // {
-     // Serial.println("0");
-     // client.publish("room/IR", "0");
-    //}
-  }
+}
