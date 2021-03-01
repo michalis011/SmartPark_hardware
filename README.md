@@ -51,6 +51,11 @@ Import the "Raspberry_PI_4_flow.js" scrip and Deploy.
 ```sh
 pi@raspberry:~ $ sudo npm install -g node-red-contrib-camerapi
   ```
+###### Raspberry Pi SQLite Database
+```sh
+pi@raspberry:~ $ sudo apt-get install sqlite3
+pi@raspberry:~/.node-red $ npm install node-red-node-sqlite
+  ```
 ###### Raspberry Pi/ Cloud Server Mosquitto Broker
 ```sh
 For Pi4: sudo apt install -y mosquitto mosquitto-clients
