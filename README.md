@@ -18,7 +18,13 @@ Once downloaded, go to Tools > Manage Libraries, search and install the latest v
 
 Once installed, go to Tools > Board > ESP8622 Boards, and choose the "LOLIN (WEMOS) D1 R2 & mini".
 
-Everything is set! Connect the Wemos D1 mini to the windows 10 mchine through a USB cable. Verify and Upload the "Wemos_MQTT_connection_sender.ino" script.
+Everything is set! Connect the Wemos D1 mini to the windows 10 mchine through a USB cable. 
+
+#### For entrance barrier Wi-Fi module:
+Verify and Upload the "Wemos_MQTT_connection_sender_parking_entrance.ino" script.
+
+#### For slots Wi-Fi module:
+Verify and Upload the "Wemos_MQTT_connection_sender_parking_slots.ino" script.
 
 ### Node-red
 #### Windows 10 Installation
